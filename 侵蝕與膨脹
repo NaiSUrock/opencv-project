@@ -1,0 +1,27 @@
+import cv2
+import os
+import numpy as np
+
+image_path = os.path.abspath('/Users/yirui/Desktop/code/opencv/1.jpeg')
+img = cv2.imread(image_path)
+img1 = cv2.imread(image_path,cv2.IMREAD_GRAYSCALE)
+
+
+thresh=127
+maxval=255
+
+ret, th1=cv2.threshold(img1,thresh,maxval, cv2.THRESH_TOZERO)
+
+npkernal = np.uint8(np.ones(( 3 , 3 )))
+nperoded = cv2.erode(th1 , npkernal)
+npdilate = cv2.dilate(th1 , npkernal)
+
+img = cv2.resize(img,(0,0),fx=0.8,fy=0.8)
+
+cv2.imshow('original',img)
+cv2.imshow('2',th1)
+cv2.imshow('Erode by numpy npkernal' , nperoded)
+cv2.imshow('Dilate by numpy npkernal' , npdilate)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
