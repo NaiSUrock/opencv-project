@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+import os 
+
+imagepath = os.path.abspath('/Users/yirui/Desktop/code/opencv/1.jpeg')
+img = cv2.imread(imagepath)
+imggray = cv2.imread(imagepath,cv2.IMREAD_GRAYSCALE)
+
+x = cv2.Sobel(imggray,cv2.CV_16S, 1 ,0)
+y = cv2.Sobel(imggray,cv2.CV_16S, 0 ,1)
+absx = cv2.convertScaleAbs(x)
+absy = cv2.convertScaleAbs(y)
+Sobel = cv2.addWeighted(absx,0.5,absy,0.5,0)
+
+thresh=127
+maxval=255
+ret, th1=cv2.threshold(imggray,thresh,maxval, cv2.THRESH_TOZERO)
+npkernal = np.uint8(np.ones(( 3 , 3 )))
+nperoded = cv2.erode(th1 , npkernal)
+
+blurred = cv2.GaussianBlur(nperoded ,(3,3),0)
+canny = cv2.Canny(blurred , 30,150)
+
+cv2.imshow('gray',imggray)
+cv2.imshow("sobel",Sobel)
+cv2.imshow("canny",canny)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
